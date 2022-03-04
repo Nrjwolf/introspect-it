@@ -1,6 +1,6 @@
 {
   "name": "introspect-it",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "introspect-it coverts Postgres schemas into typescript types",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
