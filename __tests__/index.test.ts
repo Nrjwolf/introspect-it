@@ -52,7 +52,10 @@ describe('inferTable', () => {
   it('infers a table', async () => {
     const code = await inferTable(connectionString, 'account')
     expect(code).toMatchInlineSnapshot(`
-      "export type AccountTableUsername = string
+      "/* tslint:disable */
+      /* eslint-disable */
+
+      export type AccountTableUsername = string
       export type AccountTablePassword = string
       export type AccountTableEmail = string
       export type AccountTableCreatedOn = Date
@@ -82,7 +85,10 @@ describe('inferTable', () => {
   it('works with enums', async () => {
     const code = await inferTable(connectionString, 'requests')
     expect(code).toMatchInlineSnapshot(`
-      "export type RequestsTableName = string
+      "/* tslint:disable */
+      /* eslint-disable */
+
+      export type RequestsTableName = string
       export type RequestsTableUrl = string
       export type RequestsTableIntegrationType = \\"destination\\" | \\"source\\"
 
@@ -110,6 +116,9 @@ describe('inferTable', () => {
       export type JSONValue = JSONPrimitive | JSONObject | JSONArray
       export type JSONObject = { [member: string]: JSONValue }
       export type JSONArray = Array<JSONValue>
+
+      /* tslint:disable */
+      /* eslint-disable */
 
       export type ComplexTableId = JSONValue
       export type ComplexTableName = string
@@ -143,7 +152,10 @@ describe('inferSchema', () => {
   it('infers all tables at once', async () => {
     const code = await inferSchema(connectionString)
     expect(code).toMatchInlineSnapshot(`
-      "export type JSONPrimitive = string | number | boolean | null
+      "/* tslint:disable */
+      /* eslint-disable */
+
+      export type JSONPrimitive = string | number | boolean | null
       export type JSONValue = JSONPrimitive | JSONObject | JSONArray
       export type JSONObject = { [member: string]: JSONValue }
       export type JSONArray = Array<JSONValue>

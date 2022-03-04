@@ -10,6 +10,9 @@ export type JSONArray = Array<JSONValue>;
 
 `
 
+const linterDisableHeader = `/* tslint:disable */
+/* eslint-disable */\n`
+
 const header = (includesJSON: boolean): string => (includesJSON ? JSONHeader : '')
 
 function pretty(code: string): string {
@@ -26,6 +29,7 @@ export async function inferTable(connectionString: string, table: string): Promi
   const code = tableToTS(table, await db.table(table))
   const fullCode = `
     ${header(code.includes('JSONValue'))}
+    ${linterDisableHeader}
     ${code}
   `
   return pretty(fullCode)
@@ -36,5 +40,7 @@ export async function inferSchema(connectionString: string): Promise<string> {
   const tables = await db.allTables()
   const interfaces = tables.map(table => tableToTS(table.name, table.table))
   const code = [header(interfaces.some(i => i.includes('JSONValue'))), ...interfaces].join('\n')
-  return pretty(code)
+  return pretty(`
+  ${linterDisableHeader}
+  ${code}`)
 }
