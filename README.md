@@ -1,20 +1,24 @@
-# postgres-schema-ts
+# introspect-it
 
-> Convert Postgres schemas into TypeScript interfaces
-
-MySQL implementation: http://github.com/nettofarah/mysql-schema-ts
+> Convert Postgres schemas into TypeScript types
 
 # Usage
 
 ```bash
 # to infer an entire schema
-$ npx postgres-schema-ts postgresql://postgres@localhost:5433/db?currentSchema=public
+$ npx introspec-it postgresql://postgres@localhost:5433/db?currentSchema=public
 
 # to infer a specific table
-$ npx postgres-schema-ts postgresql://postgres@localhost:5433/db?currentSchema=public table_name
+$ npx introspec-it postgresql://postgres@localhost:5433/db?currentSchema=public table_name
+
+# to infer an entire schema with envs
+$ DATABASE_URL=postgresql://postgres@localhost:5433/db?currentSchema=public npx introspec-it
+
+# to infer a specific table with envs
+$ DATABASE_URL=postgresql://postgres@localhost:5433/db?currentSchema=public TABLE_NAME=table_name npx introspec-it
 ```
 
-tip: You can pipe the output of postgres-schema-ts into a file with `npx postgres-schema-ts <args> > schema.ts`
+tip: You can pipe the output of introspec-it into a file with `npx introspec-it <args> > schema.ts`
 
 ## Demo
 
@@ -33,11 +37,11 @@ CREATE TABLE account (
 run:
 
 ```bash
-$ npx postgres-schema-ts postgresql://postgres@localhost:5433/db?currentSchema=public
+$ npx introspec-it postgresql://postgres@localhost:5433/db?currentSchema=public
 ```
 
 ```typescript
-export interface account {
+export type Account = {
   username: string
   password: string
   email: string
@@ -46,10 +50,10 @@ export interface account {
 }
 ```
 
-## Using `postgres-schema-ts` programatically
+## Using `introspec-it` programatically
 
 ```typescript
-import { inferSchema, inferTable } from 'postgres-schema-ts'
+import { inferSchema, inferTable } from 'introspec-it'
 
 await inferSchema(connectionString)
 await inferTable(connectionString, tableName)
@@ -57,7 +61,7 @@ await inferTable(connectionString, tableName)
 
 ## Design
 
-postgres-schema-ts is inpired by the awesome [schemats](https://github.com/SweetIQ/schemats) library.
+introspec-it is inpired by the awesome [schemats](https://github.com/SweetIQ/schemats) library.
 But takes a simpler, more blunt, and configuration free approach:
 
 - Simpler defaults
