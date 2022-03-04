@@ -4,8 +4,8 @@ import { inferSchema, inferTable } from '../src'
 const [...args] = process.argv
 
 async function main(): Promise<string> {
-  const db = args[2] || ''
-  const table = args[3]
+  const db = args[2] || process.env.DATABASE_URL || ''
+  const table = args[3] || process.env.TABLE_NAME
 
   if (table) {
     return inferTable(db, table)
