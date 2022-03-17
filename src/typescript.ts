@@ -32,22 +32,27 @@ export function tableToTS(name: string, table: Table): string {
     return `export type ${typeColumnName(tableName, column)} = ${type}${nullable};\n`
   })
 
+  const columnNames = Object.keys(table).map(column => {
+    return `export const ${typeColumnName(tableName, column)}ColumnName = "${column}";\n`
+  })
+
   const members = Object.keys(table).map(column => {
     return `${column}: ${typeColumnName(tableName, column)}\n`
   })
 
-  const columnNames = Object.keys(table).map(column => {
-    return `${column}: "${column}",\n`
+  const columnNamesObj = Object.keys(table).map(column => {
+    return `${column}: ${typeColumnName(tableName, column)}ColumnName,\n`
   })
 
   return `
     ${fields.join('')}
+    ${columnNames.join('')}
     export type ${tableName} = {
       ${members.join('')}
     }\n
     export const ${tableName}Name = "${name}";\n
     export const ${tableName}ColumnNames = {
-      ${columnNames.join('')}
-    }\n
+      ${columnNamesObj.join('')}
+    } as const\n
   `
 }
