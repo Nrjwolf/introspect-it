@@ -55,17 +55,13 @@ describe('inferTable', () => {
       "/* tslint:disable */
       /* eslint-disable */
 
+      export const SchemaName = \\"public\\" as const
+
       export type AccountTableUsername = string
       export type AccountTablePassword = string
       export type AccountTableEmail = string
       export type AccountTableCreatedOn = Date
       export type AccountTableLastLogin = Date | null
-
-      export const AccountTableUsernameColumnName = \\"username\\"
-      export const AccountTablePasswordColumnName = \\"password\\"
-      export const AccountTableEmailColumnName = \\"email\\"
-      export const AccountTableCreatedOnColumnName = \\"created_on\\"
-      export const AccountTableLastLoginColumnName = \\"last_login\\"
 
       export type AccountTable = {
         username: AccountTableUsername
@@ -75,7 +71,13 @@ describe('inferTable', () => {
         last_login: AccountTableLastLogin
       }
 
-      export const AccountTableName = \\"account\\"
+      export const AccountTableName = \\"account\\" as const
+
+      export const AccountTableUsernameColumnName = \\"username\\" as const
+      export const AccountTablePasswordColumnName = \\"password\\" as const
+      export const AccountTableEmailColumnName = \\"email\\" as const
+      export const AccountTableCreatedOnColumnName = \\"created_on\\" as const
+      export const AccountTableLastLoginColumnName = \\"last_login\\" as const
 
       export const AccountTableColumnNames = {
         username: AccountTableUsernameColumnName,
@@ -94,13 +96,11 @@ describe('inferTable', () => {
       "/* tslint:disable */
       /* eslint-disable */
 
+      export const SchemaName = \\"public\\" as const
+
       export type RequestsTableName = string
       export type RequestsTableUrl = string
       export type RequestsTableIntegrationType = \\"destination\\" | \\"source\\"
-
-      export const RequestsTableNameColumnName = \\"name\\"
-      export const RequestsTableUrlColumnName = \\"url\\"
-      export const RequestsTableIntegrationTypeColumnName = \\"integration_type\\"
 
       export type RequestsTable = {
         name: RequestsTableName
@@ -108,7 +108,11 @@ describe('inferTable', () => {
         integration_type: RequestsTableIntegrationType
       }
 
-      export const RequestsTableName = \\"requests\\"
+      export const RequestsTableName = \\"requests\\" as const
+
+      export const RequestsTableNameColumnName = \\"name\\" as const
+      export const RequestsTableUrlColumnName = \\"url\\" as const
+      export const RequestsTableIntegrationTypeColumnName = \\"integration_type\\" as const
 
       export const RequestsTableColumnNames = {
         name: RequestsTableNameColumnName,
@@ -130,17 +134,13 @@ describe('inferTable', () => {
       /* tslint:disable */
       /* eslint-disable */
 
+      export const SchemaName = \\"public\\" as const
+
       export type ComplexTableId = JSONValue
       export type ComplexTableName = string
       export type ComplexTableNullable = string | null
       export type ComplexTableCreatedAt = Date | null
       export type ComplexTableCreatedOn = Date
-
-      export const ComplexTableIdColumnName = \\"id\\"
-      export const ComplexTableNameColumnName = \\"name\\"
-      export const ComplexTableNullableColumnName = \\"nullable\\"
-      export const ComplexTableCreatedAtColumnName = \\"created_at\\"
-      export const ComplexTableCreatedOnColumnName = \\"created_on\\"
 
       export type ComplexTable = {
         id: ComplexTableId
@@ -150,7 +150,13 @@ describe('inferTable', () => {
         created_on: ComplexTableCreatedOn
       }
 
-      export const ComplexTableName = \\"complex\\"
+      export const ComplexTableName = \\"complex\\" as const
+
+      export const ComplexTableIdColumnName = \\"id\\" as const
+      export const ComplexTableNameColumnName = \\"name\\" as const
+      export const ComplexTableNullableColumnName = \\"nullable\\" as const
+      export const ComplexTableCreatedAtColumnName = \\"created_at\\" as const
+      export const ComplexTableCreatedOnColumnName = \\"created_on\\" as const
 
       export const ComplexTableColumnNames = {
         id: ComplexTableIdColumnName,
@@ -171,6 +177,8 @@ describe('inferSchema', () => {
       "/* tslint:disable */
       /* eslint-disable */
 
+      export const SchemaName = \\"public\\" as const
+
       export type JSONPrimitive = string | number | boolean | null
       export type JSONValue = JSONPrimitive | JSONObject | JSONArray
       export type JSONObject = { [member: string]: JSONValue }
@@ -182,12 +190,6 @@ describe('inferSchema', () => {
       export type AccountTableCreatedOn = Date
       export type AccountTableLastLogin = Date | null
 
-      export const AccountTableUsernameColumnName = \\"username\\"
-      export const AccountTablePasswordColumnName = \\"password\\"
-      export const AccountTableEmailColumnName = \\"email\\"
-      export const AccountTableCreatedOnColumnName = \\"created_on\\"
-      export const AccountTableLastLoginColumnName = \\"last_login\\"
-
       export type AccountTable = {
         username: AccountTableUsername
         password: AccountTablePassword
@@ -196,7 +198,13 @@ describe('inferSchema', () => {
         last_login: AccountTableLastLogin
       }
 
-      export const AccountTableName = \\"account\\"
+      export const AccountTableName = \\"account\\" as const
+
+      export const AccountTableUsernameColumnName = \\"username\\" as const
+      export const AccountTablePasswordColumnName = \\"password\\" as const
+      export const AccountTableEmailColumnName = \\"email\\" as const
+      export const AccountTableCreatedOnColumnName = \\"created_on\\" as const
+      export const AccountTableLastLoginColumnName = \\"last_login\\" as const
 
       export const AccountTableColumnNames = {
         username: AccountTableUsernameColumnName,
@@ -212,12 +220,6 @@ describe('inferSchema', () => {
       export type ComplexTableCreatedAt = Date | null
       export type ComplexTableCreatedOn = Date
 
-      export const ComplexTableIdColumnName = \\"id\\"
-      export const ComplexTableNameColumnName = \\"name\\"
-      export const ComplexTableNullableColumnName = \\"nullable\\"
-      export const ComplexTableCreatedAtColumnName = \\"created_at\\"
-      export const ComplexTableCreatedOnColumnName = \\"created_on\\"
-
       export type ComplexTable = {
         id: ComplexTableId
         name: ComplexTableName
@@ -226,7 +228,13 @@ describe('inferSchema', () => {
         created_on: ComplexTableCreatedOn
       }
 
-      export const ComplexTableName = \\"complex\\"
+      export const ComplexTableName = \\"complex\\" as const
+
+      export const ComplexTableIdColumnName = \\"id\\" as const
+      export const ComplexTableNameColumnName = \\"name\\" as const
+      export const ComplexTableNullableColumnName = \\"nullable\\" as const
+      export const ComplexTableCreatedAtColumnName = \\"created_at\\" as const
+      export const ComplexTableCreatedOnColumnName = \\"created_on\\" as const
 
       export const ComplexTableColumnNames = {
         id: ComplexTableIdColumnName,
@@ -240,17 +248,17 @@ describe('inferSchema', () => {
       export type RequestsTableUrl = string
       export type RequestsTableIntegrationType = \\"destination\\" | \\"source\\"
 
-      export const RequestsTableNameColumnName = \\"name\\"
-      export const RequestsTableUrlColumnName = \\"url\\"
-      export const RequestsTableIntegrationTypeColumnName = \\"integration_type\\"
-
       export type RequestsTable = {
         name: RequestsTableName
         url: RequestsTableUrl
         integration_type: RequestsTableIntegrationType
       }
 
-      export const RequestsTableName = \\"requests\\"
+      export const RequestsTableName = \\"requests\\" as const
+
+      export const RequestsTableNameColumnName = \\"name\\" as const
+      export const RequestsTableUrlColumnName = \\"url\\" as const
+      export const RequestsTableIntegrationTypeColumnName = \\"integration_type\\" as const
 
       export const RequestsTableColumnNames = {
         name: RequestsTableNameColumnName,

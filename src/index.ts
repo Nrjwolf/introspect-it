@@ -30,6 +30,7 @@ export async function inferTable(connectionString: string, table: string): Promi
   const fullCode = `
     ${header(code.includes('JSONValue'))}
     ${linterDisableHeader}
+    export const SchemaName = "${db.schema()}" as const
     ${code}
   `
   return pretty(fullCode)
@@ -38,9 +39,12 @@ export async function inferTable(connectionString: string, table: string): Promi
 export async function inferSchema(connectionString: string): Promise<string> {
   const db = new Postgres(connectionString)
   const tables = await db.allTables()
-  const interfaces = tables.map(table => tableToTS(table.name, table.table))
+  const interfaces = tables
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map(table => tableToTS(table.name, table.table))
   const code = [header(interfaces.some(i => i.includes('JSONValue'))), ...interfaces].join('\n')
   return pretty(`
   ${linterDisableHeader}
+  export const SchemaName = "${db.schema()}" as const
   ${code}`)
 }
