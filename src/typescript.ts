@@ -19,7 +19,7 @@ export interface Table {
 //   }
 // }
 
-const typeColumnName = (tableName: string, columnName: string) => {
+const typeColumnName = (tableName: string, columnName: string): string => {
   return `${tableName}${camelCase(columnName, { pascalCase: true })}`
 }
 
@@ -37,11 +37,11 @@ export function tableToTS(name: string, table: Table): string {
   })
 
   const members = Object.keys(table).map(column => {
-    return `${column}: ${typeColumnName(tableName, column)}\n`
+    return `"${column}": ${typeColumnName(tableName, column)}\n`
   })
 
   const columnNamesObj = Object.keys(table).map(column => {
-    return `${column}: ${typeColumnName(tableName, column)}ColumnName,\n`
+    return `"${column}": ${typeColumnName(tableName, column)}ColumnName,\n`
   })
 
   return `

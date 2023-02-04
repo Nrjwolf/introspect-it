@@ -1,7 +1,10 @@
-postgres:
-  image: postgres:9.6
-  ports:
-    - '5433:5432'
-  environment:
-    POSTGRES_DB: 'db'
-    POSTGRES_PASSWORD: 'password'
+version: '3.9'
+services:
+  iit-postgres:
+    image: postgres:9.6
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
