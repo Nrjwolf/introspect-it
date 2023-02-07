@@ -51,7 +51,7 @@ beforeAll(async () => {
 
 describe('inferTable', () => {
   it('infers a table', async () => {
-    const code = await inferTable(connectionString, 'account')
+    const code = await inferTable(connectionString, 'account', true, true)
     expect(code).toMatchInlineSnapshot(`
       "/* tslint:disable */
       /* eslint-disable */
@@ -69,34 +69,34 @@ describe('inferTable', () => {
         username: AccountTableUsername
         password: AccountTablePassword
         email: AccountTableEmail
-        \\"2a\\": AccountTable2A
-        created_on: AccountTableCreatedOn
-        last_login: AccountTableLastLogin
+        \\"2A\\": AccountTable2A
+        createdOn: AccountTableCreatedOn
+        lastLogin: AccountTableLastLogin
       }
 
       export const AccountTableName = \\"account\\" as const
 
-      export const AccountTableUsernameColumnName = \\"username\\" as const
-      export const AccountTablePasswordColumnName = \\"password\\" as const
-      export const AccountTableEmailColumnName = \\"email\\" as const
-      export const AccountTable2AColumnName = \\"2a\\" as const
-      export const AccountTableCreatedOnColumnName = \\"created_on\\" as const
-      export const AccountTableLastLoginColumnName = \\"last_login\\" as const
+      export const AccountTableUsernameColumnName = \`\\"username\\"\` as const
+      export const AccountTablePasswordColumnName = \`\\"password\\"\` as const
+      export const AccountTableEmailColumnName = \`\\"email\\"\` as const
+      export const AccountTable2AColumnName = \`\\"2a\\"\` as const
+      export const AccountTableCreatedOnColumnName = \`\\"created_on\\"\` as const
+      export const AccountTableLastLoginColumnName = \`\\"last_login\\"\` as const
 
       export const AccountTableColumnNames = {
         username: AccountTableUsernameColumnName,
         password: AccountTablePasswordColumnName,
         email: AccountTableEmailColumnName,
-        \\"2a\\": AccountTable2AColumnName,
-        created_on: AccountTableCreatedOnColumnName,
-        last_login: AccountTableLastLoginColumnName
+        \\"2A\\": AccountTable2AColumnName,
+        createdOn: AccountTableCreatedOnColumnName,
+        lastLogin: AccountTableLastLoginColumnName
       } as const
       "
     `)
   })
 
   it('works with enums', async () => {
-    const code = await inferTable(connectionString, 'requests')
+    const code = await inferTable(connectionString, 'requests', true)
     expect(code).toMatchInlineSnapshot(`
       "/* tslint:disable */
       /* eslint-disable */
@@ -110,7 +110,7 @@ describe('inferTable', () => {
       export type RequestsTable = {
         name: RequestsTableName
         url: RequestsTableUrl
-        integration_type: RequestsTableIntegrationType
+        integrationType: RequestsTableIntegrationType
       }
 
       export const RequestsTableName = \\"requests\\" as const
@@ -122,14 +122,14 @@ describe('inferTable', () => {
       export const RequestsTableColumnNames = {
         name: RequestsTableNameColumnName,
         url: RequestsTableUrlColumnName,
-        integration_type: RequestsTableIntegrationTypeColumnName
+        integrationType: RequestsTableIntegrationTypeColumnName
       } as const
       "
     `)
   })
 
   it('works with complex types', async () => {
-    const code = await inferTable(connectionString, 'complex')
+    const code = await inferTable(connectionString, 'complex', true)
     expect(code).toMatchInlineSnapshot(`
       "export type JSONPrimitive = string | number | boolean | null
       export type JSONValue = JSONPrimitive | JSONObject | JSONArray
@@ -151,8 +151,8 @@ describe('inferTable', () => {
         id: ComplexTableId
         name: ComplexTableName
         nullable: ComplexTableNullable
-        created_at: ComplexTableCreatedAt
-        created_on: ComplexTableCreatedOn
+        createdAt: ComplexTableCreatedAt
+        createdOn: ComplexTableCreatedOn
       }
 
       export const ComplexTableName = \\"complex\\" as const
@@ -167,8 +167,8 @@ describe('inferTable', () => {
         id: ComplexTableIdColumnName,
         name: ComplexTableNameColumnName,
         nullable: ComplexTableNullableColumnName,
-        created_at: ComplexTableCreatedAtColumnName,
-        created_on: ComplexTableCreatedOnColumnName
+        createdAt: ComplexTableCreatedAtColumnName,
+        createdOn: ComplexTableCreatedOnColumnName
       } as const
       "
     `)
@@ -177,7 +177,7 @@ describe('inferTable', () => {
 
 describe('inferSchema', () => {
   it('infers all tables at once', async () => {
-    const code = await inferSchema(connectionString)
+    const code = await inferSchema(connectionString, true, true)
     expect(code).toMatchInlineSnapshot(`
       "/* tslint:disable */
       /* eslint-disable */
@@ -200,27 +200,27 @@ describe('inferSchema', () => {
         username: AccountTableUsername
         password: AccountTablePassword
         email: AccountTableEmail
-        \\"2a\\": AccountTable2A
-        created_on: AccountTableCreatedOn
-        last_login: AccountTableLastLogin
+        \\"2A\\": AccountTable2A
+        createdOn: AccountTableCreatedOn
+        lastLogin: AccountTableLastLogin
       }
 
       export const AccountTableName = \\"account\\" as const
 
-      export const AccountTableUsernameColumnName = \\"username\\" as const
-      export const AccountTablePasswordColumnName = \\"password\\" as const
-      export const AccountTableEmailColumnName = \\"email\\" as const
-      export const AccountTable2AColumnName = \\"2a\\" as const
-      export const AccountTableCreatedOnColumnName = \\"created_on\\" as const
-      export const AccountTableLastLoginColumnName = \\"last_login\\" as const
+      export const AccountTableUsernameColumnName = \`\\"username\\"\` as const
+      export const AccountTablePasswordColumnName = \`\\"password\\"\` as const
+      export const AccountTableEmailColumnName = \`\\"email\\"\` as const
+      export const AccountTable2AColumnName = \`\\"2a\\"\` as const
+      export const AccountTableCreatedOnColumnName = \`\\"created_on\\"\` as const
+      export const AccountTableLastLoginColumnName = \`\\"last_login\\"\` as const
 
       export const AccountTableColumnNames = {
         username: AccountTableUsernameColumnName,
         password: AccountTablePasswordColumnName,
         email: AccountTableEmailColumnName,
-        \\"2a\\": AccountTable2AColumnName,
-        created_on: AccountTableCreatedOnColumnName,
-        last_login: AccountTableLastLoginColumnName
+        \\"2A\\": AccountTable2AColumnName,
+        createdOn: AccountTableCreatedOnColumnName,
+        lastLogin: AccountTableLastLoginColumnName
       } as const
 
       export type ComplexTableId = JSONValue
@@ -233,24 +233,24 @@ describe('inferSchema', () => {
         id: ComplexTableId
         name: ComplexTableName
         nullable: ComplexTableNullable
-        created_at: ComplexTableCreatedAt
-        created_on: ComplexTableCreatedOn
+        createdAt: ComplexTableCreatedAt
+        createdOn: ComplexTableCreatedOn
       }
 
       export const ComplexTableName = \\"complex\\" as const
 
-      export const ComplexTableIdColumnName = \\"id\\" as const
-      export const ComplexTableNameColumnName = \\"name\\" as const
-      export const ComplexTableNullableColumnName = \\"nullable\\" as const
-      export const ComplexTableCreatedAtColumnName = \\"created_at\\" as const
-      export const ComplexTableCreatedOnColumnName = \\"created_on\\" as const
+      export const ComplexTableIdColumnName = \`\\"id\\"\` as const
+      export const ComplexTableNameColumnName = \`\\"name\\"\` as const
+      export const ComplexTableNullableColumnName = \`\\"nullable\\"\` as const
+      export const ComplexTableCreatedAtColumnName = \`\\"created_at\\"\` as const
+      export const ComplexTableCreatedOnColumnName = \`\\"created_on\\"\` as const
 
       export const ComplexTableColumnNames = {
         id: ComplexTableIdColumnName,
         name: ComplexTableNameColumnName,
         nullable: ComplexTableNullableColumnName,
-        created_at: ComplexTableCreatedAtColumnName,
-        created_on: ComplexTableCreatedOnColumnName
+        createdAt: ComplexTableCreatedAtColumnName,
+        createdOn: ComplexTableCreatedOnColumnName
       } as const
 
       export type RequestsTableName = string
@@ -260,19 +260,19 @@ describe('inferSchema', () => {
       export type RequestsTable = {
         name: RequestsTableName
         url: RequestsTableUrl
-        integration_type: RequestsTableIntegrationType
+        integrationType: RequestsTableIntegrationType
       }
 
       export const RequestsTableName = \\"requests\\" as const
 
-      export const RequestsTableNameColumnName = \\"name\\" as const
-      export const RequestsTableUrlColumnName = \\"url\\" as const
-      export const RequestsTableIntegrationTypeColumnName = \\"integration_type\\" as const
+      export const RequestsTableNameColumnName = \`\\"name\\"\` as const
+      export const RequestsTableUrlColumnName = \`\\"url\\"\` as const
+      export const RequestsTableIntegrationTypeColumnName = \`\\"integration_type\\"\` as const
 
       export const RequestsTableColumnNames = {
         name: RequestsTableNameColumnName,
         url: RequestsTableUrlColumnName,
-        integration_type: RequestsTableIntegrationTypeColumnName
+        integrationType: RequestsTableIntegrationTypeColumnName
       } as const
       "
     `)

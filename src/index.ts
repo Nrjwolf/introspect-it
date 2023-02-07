@@ -24,9 +24,14 @@ function pretty(code: string): string {
   })
 }
 
-export async function inferTable(connectionString: string, table: string): Promise<string> {
+export async function inferTable(
+  connectionString: string,
+  table: string,
+  toCamelCase = false,
+  useQuotes = false
+): Promise<string> {
   const db = new Postgres(connectionString)
-  const code = tableToTS(table, await db.table(table))
+  const code = tableToTS(table, await db.table(table), toCamelCase, useQuotes)
   const fullCode = `
     ${header(code.includes('JSONValue'))}
     ${linterDisableHeader}
@@ -36,12 +41,12 @@ export async function inferTable(connectionString: string, table: string): Promi
   return pretty(fullCode)
 }
 
-export async function inferSchema(connectionString: string): Promise<string> {
+export async function inferSchema(connectionString: string, toCamelCase = false, useQuotes = false): Promise<string> {
   const db = new Postgres(connectionString)
   const tables = await db.allTables()
   const interfaces = tables
     .sort((a, b) => a.name.localeCompare(b.name))
-    .map(table => tableToTS(table.name, table.table))
+    .map(table => tableToTS(table.name, table.table, toCamelCase, useQuotes))
   const code = [header(interfaces.some(i => i.includes('JSONValue'))), ...interfaces].join('\n')
   return pretty(`
   ${linterDisableHeader}

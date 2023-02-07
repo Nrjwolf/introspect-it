@@ -23,8 +23,10 @@ const typeColumnName = (tableName: string, columnName: string): string => {
   return `${tableName}${camelCase(columnName, { pascalCase: true })}`
 }
 
-export function tableToTS(name: string, table: Table): string {
+export function tableToTS(name: string, table: Table, toCamelCase: boolean, useQuotes: boolean): string {
   const tableName = camelCase(name, { pascalCase: true }) + 'Table'
+  const prefixQuoteSymbol = useQuotes ? '`"' : '"'
+  const postfixQuoteSymbol = useQuotes ? '"`' : '"'
 
   const fields = Object.keys(table).map(column => {
     const type = table[column].tsType
@@ -33,15 +35,18 @@ export function tableToTS(name: string, table: Table): string {
   })
 
   const columnNames = Object.keys(table).map(column => {
-    return `export const ${typeColumnName(tableName, column)}ColumnName = "${column}" as const;\n`
+    return `export const ${typeColumnName(
+      tableName,
+      column
+    )}ColumnName = ${prefixQuoteSymbol}${column}${postfixQuoteSymbol} as const;\n`
   })
 
   const members = Object.keys(table).map(column => {
-    return `"${column}": ${typeColumnName(tableName, column)}\n`
+    return `"${toCamelCase ? camelCase(column) : column}": ${typeColumnName(tableName, column)}\n`
   })
 
   const columnNamesObj = Object.keys(table).map(column => {
-    return `"${column}": ${typeColumnName(tableName, column)}ColumnName,\n`
+    return `"${toCamelCase ? camelCase(column) : column}": ${typeColumnName(tableName, column)}ColumnName,\n`
   })
 
   return `
