@@ -51,9 +51,8 @@ const postProcess = (input: string, toUpperCase: (val: string) => string): strin
   SEPARATORS_AND_IDENTIFIER.lastIndex = 0
   NUMBERS_AND_IDENTIFIER.lastIndex = 0
 
-  return input
-    .replace(SEPARATORS_AND_IDENTIFIER, (_, identifier) => toUpperCase(identifier))
-    .replace(NUMBERS_AND_IDENTIFIER, m => toUpperCase(m))
+  return input.replace(SEPARATORS_AND_IDENTIFIER, (_, identifier) => toUpperCase(identifier))
+  // .replace(NUMBERS_AND_IDENTIFIER, m => toUpperCase(m))
 }
 
 interface Options {

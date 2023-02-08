@@ -61,7 +61,7 @@ describe('inferTable', () => {
       export type AccountTableUsername = string
       export type AccountTablePassword = string
       export type AccountTableEmail = string
-      export type AccountTable2A = number
+      export type AccountTable2a = number
       export type AccountTableCreatedOn = Date
       export type AccountTableLastLogin = Date | null
 
@@ -69,7 +69,7 @@ describe('inferTable', () => {
         username: AccountTableUsername
         password: AccountTablePassword
         email: AccountTableEmail
-        \\"2A\\": AccountTable2A
+        \\"2a\\": AccountTable2a
         createdOn: AccountTableCreatedOn
         lastLogin: AccountTableLastLogin
       }
@@ -79,7 +79,7 @@ describe('inferTable', () => {
       export const AccountTableUsernameColumnName = \`\\"username\\"\` as const
       export const AccountTablePasswordColumnName = \`\\"password\\"\` as const
       export const AccountTableEmailColumnName = \`\\"email\\"\` as const
-      export const AccountTable2AColumnName = \`\\"2a\\"\` as const
+      export const AccountTable2aColumnName = \`\\"2a\\"\` as const
       export const AccountTableCreatedOnColumnName = \`\\"created_on\\"\` as const
       export const AccountTableLastLoginColumnName = \`\\"last_login\\"\` as const
 
@@ -87,7 +87,7 @@ describe('inferTable', () => {
         username: AccountTableUsernameColumnName,
         password: AccountTablePasswordColumnName,
         email: AccountTableEmailColumnName,
-        \\"2A\\": AccountTable2AColumnName,
+        \\"2a\\": AccountTable2aColumnName,
         createdOn: AccountTableCreatedOnColumnName,
         lastLogin: AccountTableLastLoginColumnName
       } as const
@@ -192,7 +192,7 @@ describe('inferSchema', () => {
       export type AccountTableUsername = string
       export type AccountTablePassword = string
       export type AccountTableEmail = string
-      export type AccountTable2A = number
+      export type AccountTable2a = number
       export type AccountTableCreatedOn = Date
       export type AccountTableLastLogin = Date | null
 
@@ -200,7 +200,7 @@ describe('inferSchema', () => {
         username: AccountTableUsername
         password: AccountTablePassword
         email: AccountTableEmail
-        \\"2A\\": AccountTable2A
+        \\"2a\\": AccountTable2a
         createdOn: AccountTableCreatedOn
         lastLogin: AccountTableLastLogin
       }
@@ -210,7 +210,7 @@ describe('inferSchema', () => {
       export const AccountTableUsernameColumnName = \`\\"username\\"\` as const
       export const AccountTablePasswordColumnName = \`\\"password\\"\` as const
       export const AccountTableEmailColumnName = \`\\"email\\"\` as const
-      export const AccountTable2AColumnName = \`\\"2a\\"\` as const
+      export const AccountTable2aColumnName = \`\\"2a\\"\` as const
       export const AccountTableCreatedOnColumnName = \`\\"created_on\\"\` as const
       export const AccountTableLastLoginColumnName = \`\\"last_login\\"\` as const
 
@@ -218,7 +218,7 @@ describe('inferSchema', () => {
         username: AccountTableUsernameColumnName,
         password: AccountTablePasswordColumnName,
         email: AccountTableEmailColumnName,
-        \\"2A\\": AccountTable2AColumnName,
+        \\"2a\\": AccountTable2aColumnName,
         createdOn: AccountTableCreatedOnColumnName,
         lastLogin: AccountTableLastLoginColumnName
       } as const
