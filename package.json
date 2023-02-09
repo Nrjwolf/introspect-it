@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "eslint src/**/*.ts",
     "test": "docker-compose up -d && jest --runInBand --forceExit",
-    "pub": "tsc -p . && np",
+    "pub": "tsc -P ./tsconfig.json && np",
     "cli": "ts-node ./bin/index.ts"
   },
   "prettier": {
