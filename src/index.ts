@@ -1,6 +1,7 @@
-import { tableToTS } from './typescript'
-import { Postgres } from './pg-client'
-import { format } from 'prettier'
+import { exportTableDataToTs, tableToTS } from "./typescript";
+import { Postgres } from "./pg-client";
+import { format } from "prettier";
+import { SQL as sql } from "sql-template-strings";
 
 const JSONHeader = `
 export type JSONPrimitive = string | number | boolean | null;
@@ -8,20 +9,20 @@ export type JSONValue = JSONPrimitive | JSONObject | JSONArray;
 export type JSONObject = { [member: string]: JSONValue };
 export type JSONArray = Array<JSONValue>;
 
-`
+`;
 
 const linterDisableHeader = `/* tslint:disable */
-/* eslint-disable */\n`
+/* eslint-disable */\n`;
 
-const header = (includesJSON: boolean): string => (includesJSON ? JSONHeader : '')
+const header = (includesJSON: boolean): string => (includesJSON ? JSONHeader : "");
 
 function pretty(code: string): string {
   return format(code, {
-    parser: 'typescript',
-    semi: false,
+    parser: "typescript",
+    semi: true,
     singleQuote: false,
     printWidth: 120
-  })
+  });
 }
 
 export async function inferTable(
@@ -30,26 +31,38 @@ export async function inferTable(
   toCamelCase = false,
   useQuotes = false
 ): Promise<string> {
-  const db = new Postgres(connectionString)
-  const code = tableToTS(table, await db.table(table), toCamelCase, useQuotes)
+  const db = new Postgres(connectionString);
+  const code = tableToTS(table, await db.table(table), toCamelCase, useQuotes);
   const fullCode = `
-    ${header(code.includes('JSONValue'))}
+    ${header(code.includes("JSONValue"))}
     ${linterDisableHeader}
     export const SchemaName = "${db.schema()}" as const
     ${code}
-  `
-  return pretty(fullCode)
+  `;
+  return pretty(fullCode);
 }
 
 export async function inferSchema(connectionString: string, toCamelCase = false, useQuotes = false): Promise<string> {
-  const db = new Postgres(connectionString)
-  const tables = await db.allTables()
+  const db = new Postgres(connectionString);
+  const tables = await db.allTables();
   const interfaces = tables
     .sort((a, b) => a.name.localeCompare(b.name))
-    .map(table => tableToTS(table.name, table.table, toCamelCase, useQuotes))
-  const code = [header(interfaces.some(i => i.includes('JSONValue'))), ...interfaces].join('\n')
+    .map(table => tableToTS(table.name, table.table, toCamelCase, useQuotes));
+  const code = [header(interfaces.some(i => i.includes("JSONValue"))), ...interfaces].join("\n");
   return pretty(`
   ${linterDisableHeader}
   export const SchemaName = "${db.schema()}" as const
-  ${code}`)
+  ${code}`);
+}
+
+export async function exportTable(connectionString: string, table: string, primaryKey = "id"): Promise<string> {
+  const db = new Postgres(connectionString);
+
+  const code = exportTableDataToTs(table, await db.query(sql`SELECT * FROM `.append(table)), primaryKey);
+  const fullCode = `
+    ${header(code.includes("JSONValue"))}
+    ${linterDisableHeader}
+    ${code}
+  `;
+  return pretty(fullCode);
 }

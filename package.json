@@ -1,6 +1,6 @@
 {
   "name": "introspect-it",
-  "version": "0.5.1",
+  "version": "0.6.1",
   "description": "introspect-it coverts Postgres schemas into typescript types",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
@@ -13,8 +13,8 @@
     "cli": "ts-node ./bin/index.ts"
   },
   "prettier": {
-    "semi": false,
-    "singleQuote": true,
+    "semi": true,
+    "singleQuote": false,
     "printWidth": 120
   },
   "repository": {
@@ -22,10 +22,12 @@
     "url": "https://github.com/Dionid/introspect-it.git"
   },
   "dependencies": {
+    "@types/yargs": "^17.0.22",
     "lodash": "^4.17.15",
     "pg-promise": "^10.11.1",
     "prettier": "^1.19.1",
-    "sql-template-strings": "^2.2.2"
+    "sql-template-strings": "^2.2.2",
+    "yargs": "^17.6.2"
   },
   "files": [
     "dist"

@@ -1,9 +1,9 @@
-import { Postgres } from '../src/pg-client'
-import { inferTable, inferSchema } from '../src'
-import { SQL as sql } from 'sql-template-strings'
+import { Postgres } from "../src/pg-client";
+import { inferTable, inferSchema, exportTable } from "../src";
+import { SQL as sql } from "sql-template-strings";
 
-const connectionString = 'postgresql://postgres:password@localhost:5433/db?currentSchema=public'
-const pg = new Postgres(connectionString)
+const connectionString = "postgresql://postgres:password@localhost:5433/db?currentSchema=public";
+const pg = new Postgres(connectionString);
 
 const account = sql`
   DROP TABLE IF EXISTS account;
@@ -14,8 +14,8 @@ const account = sql`
     "2a" integer NOT NULL,
     created_on TIMESTAMP NOT NULL,
     last_login TIMESTAMP
-  )
-`
+  );
+`;
 
 const requests = sql`
   DROP TYPE IF EXISTS integration_type_enum CASCADE;
@@ -28,9 +28,13 @@ const requests = sql`
   CREATE TABLE requests (
     name varchar(255) NOT NULL,
     url varchar(255) NOT NULL,
-    integration_type integration_type_enum NOT NULL
+    integration_type integration_type_enum NOT NULL,
+    some_int integer
   );
-`
+
+  INSERT INTO requests(name, url, integration_type, some_int) VALUES ('first', 'is-url', 'source', 10);
+  INSERT INTO requests(name, url, integration_type, some_int) VALUES ('second', 'the-url', 'destination', 20);
+`;
 
 const complex = sql`
   DROP TABLE IF EXISTS complex;
@@ -41,47 +45,47 @@ const complex = sql`
     created_at timestamp,
     created_on date NOT NULL
   )
-`
+`;
 
 beforeAll(async () => {
-  await pg.query(account)
-  await pg.query(requests)
-  await pg.query(complex)
-})
+  await pg.query(account);
+  await pg.query(requests);
+  await pg.query(complex);
+});
 
-describe('inferTable', () => {
-  it('infers a table', async () => {
-    const code = await inferTable(connectionString, 'account', true, true)
+describe("inferTable", () => {
+  it("infers a table", async () => {
+    const code = await inferTable(connectionString, "account", true, true);
     expect(code).toMatchInlineSnapshot(`
       "/* tslint:disable */
       /* eslint-disable */
 
-      export const SchemaName = \\"public\\" as const
+      export const SchemaName = \\"public\\" as const;
 
-      export type AccountTableUsername = string
-      export type AccountTablePassword = string
-      export type AccountTableEmail = string
-      export type AccountTable2a = number
-      export type AccountTableCreatedOn = Date
-      export type AccountTableLastLogin = Date | null
+      export type AccountTableUsername = string;
+      export type AccountTablePassword = string;
+      export type AccountTableEmail = string;
+      export type AccountTable2a = number;
+      export type AccountTableCreatedOn = Date;
+      export type AccountTableLastLogin = Date | null;
 
       export type AccountTable = {
-        username: AccountTableUsername
-        password: AccountTablePassword
-        email: AccountTableEmail
-        \\"2a\\": AccountTable2a
-        createdOn: AccountTableCreatedOn
-        lastLogin: AccountTableLastLogin
-      }
+        username: AccountTableUsername;
+        password: AccountTablePassword;
+        email: AccountTableEmail;
+        \\"2a\\": AccountTable2a;
+        createdOn: AccountTableCreatedOn;
+        lastLogin: AccountTableLastLogin;
+      };
 
-      export const AccountTableName = \\"account\\" as const
+      export const AccountTableName = \\"account\\" as const;
 
-      export const AccountTableUsernameColumnName = \`\\"username\\"\` as const
-      export const AccountTablePasswordColumnName = \`\\"password\\"\` as const
-      export const AccountTableEmailColumnName = \`\\"email\\"\` as const
-      export const AccountTable2aColumnName = \`\\"2a\\"\` as const
-      export const AccountTableCreatedOnColumnName = \`\\"created_on\\"\` as const
-      export const AccountTableLastLoginColumnName = \`\\"last_login\\"\` as const
+      export const AccountTableUsernameColumnName = \`\\"username\\"\` as const;
+      export const AccountTablePasswordColumnName = \`\\"password\\"\` as const;
+      export const AccountTableEmailColumnName = \`\\"email\\"\` as const;
+      export const AccountTable2aColumnName = \`\\"2a\\"\` as const;
+      export const AccountTableCreatedOnColumnName = \`\\"created_on\\"\` as const;
+      export const AccountTableLastLoginColumnName = \`\\"last_login\\"\` as const;
 
       export const AccountTableColumnNames = {
         username: AccountTableUsernameColumnName,
@@ -90,78 +94,82 @@ describe('inferTable', () => {
         \\"2a\\": AccountTable2aColumnName,
         createdOn: AccountTableCreatedOnColumnName,
         lastLogin: AccountTableLastLoginColumnName
-      } as const
+      } as const;
       "
-    `)
-  })
+    `);
+  });
 
-  it('works with enums', async () => {
-    const code = await inferTable(connectionString, 'requests', true)
+  it("works with enums", async () => {
+    const code = await inferTable(connectionString, "requests", true);
     expect(code).toMatchInlineSnapshot(`
       "/* tslint:disable */
       /* eslint-disable */
 
-      export const SchemaName = \\"public\\" as const
+      export const SchemaName = \\"public\\" as const;
 
-      export type RequestsTableName = string
-      export type RequestsTableUrl = string
-      export type RequestsTableIntegrationType = \\"destination\\" | \\"source\\"
+      export type RequestsTableName = string;
+      export type RequestsTableUrl = string;
+      export type RequestsTableIntegrationType = \\"destination\\" | \\"source\\";
+      export type RequestsTableSomeInt = number | null;
 
       export type RequestsTable = {
-        name: RequestsTableName
-        url: RequestsTableUrl
-        integrationType: RequestsTableIntegrationType
-      }
+        name: RequestsTableName;
+        url: RequestsTableUrl;
+        integrationType: RequestsTableIntegrationType;
+        someInt: RequestsTableSomeInt;
+      };
 
-      export const RequestsTableName = \\"requests\\" as const
+      export const RequestsTableName = \\"requests\\" as const;
 
-      export const RequestsTableNameColumnName = \\"name\\" as const
-      export const RequestsTableUrlColumnName = \\"url\\" as const
-      export const RequestsTableIntegrationTypeColumnName = \\"integration_type\\" as const
+      export const RequestsTableNameColumnName = \\"name\\" as const;
+      export const RequestsTableUrlColumnName = \\"url\\" as const;
+      export const RequestsTableIntegrationTypeColumnName = \\"integration_type\\" as const;
+      export const RequestsTableSomeIntColumnName = \\"some_int\\" as const;
 
       export const RequestsTableColumnNames = {
         name: RequestsTableNameColumnName,
         url: RequestsTableUrlColumnName,
-        integrationType: RequestsTableIntegrationTypeColumnName
-      } as const
+        integrationType: RequestsTableIntegrationTypeColumnName,
+        someInt: RequestsTableSomeIntColumnName
+      } as const;
       "
-    `)
-  })
+    `);
+  });
 
-  it('works with complex types', async () => {
-    const code = await inferTable(connectionString, 'complex', true)
+  it("works with complex types", async () => {
+    const code = await inferTable(connectionString, "complex", true);
     expect(code).toMatchInlineSnapshot(`
-      "export type JSONPrimitive = string | number | boolean | null
-      export type JSONValue = JSONPrimitive | JSONObject | JSONArray
-      export type JSONObject = { [member: string]: JSONValue }
-      export type JSONArray = Array<JSONValue>
+      "export type JSONPrimitive = string | number | boolean | null;
+      export type JSONValue = JSONPrimitive | JSONObject | JSONArray;
+      export type JSONObject = { [member: string]: JSONValue };
+      export type JSONArray = Array<JSONValue>;
 
       /* tslint:disable */
       /* eslint-disable */
 
-      export const SchemaName = \\"public\\" as const
+      export const SchemaName = \\"public\\" as const;
 
-      export type ComplexTableId = JSONValue
-      export type ComplexTableName = string
-      export type ComplexTableNullable = string | null
-      export type ComplexTableCreatedAt = Date | null
-      export type ComplexTableCreatedOn = Date
+      export type ComplexTableId = JSONValue;
+      export type ComplexTableName = string;
+      export type ComplexTableNullable = string | null;
+      export type ComplexTableCreatedAt = Date | null;
+      export type ComplexTableCreatedOn = Date;
 
       export type ComplexTable = {
-        id: ComplexTableId
-        name: ComplexTableName
-        nullable: ComplexTableNullable
-        createdAt: ComplexTableCreatedAt
-        createdOn: ComplexTableCreatedOn
-      }
+        id: ComplexTableId;
+        name: ComplexTableName;
+        nullable: ComplexTableNullable;
+        createdAt: ComplexTableCreatedAt;
+        createdOn: ComplexTableCreatedOn;
+      };
 
-      export const ComplexTableName = \\"complex\\" as const
+      export const ComplexTableName = \\"complex\\" as const;
 
-      export const ComplexTableIdColumnName = \\"id\\" as const
-      export const ComplexTableNameColumnName = \\"name\\" as const
-      export const ComplexTableNullableColumnName = \\"nullable\\" as const
-      export const ComplexTableCreatedAtColumnName = \\"created_at\\" as const
-      export const ComplexTableCreatedOnColumnName = \\"created_on\\" as const
+      export const ComplexTableIdColumnName = \\"id\\" as const;
+      export const ComplexTableNameColumnName = \\"name\\" as const;
+      export const ComplexTableNullableColumnName = \\"nullable\\" as const;
+      export const ComplexTableCreatedAtColumnName = \\"created_at\\" as const;
+      export const ComplexTableCreatedOnColumnName = \\"created_on\\" as const;
 
       export const ComplexTableColumnNames = {
         id: ComplexTableIdColumnName,
@@ -169,50 +177,50 @@ describe('inferTable', () => {
         nullable: ComplexTableNullableColumnName,
         createdAt: ComplexTableCreatedAtColumnName,
         createdOn: ComplexTableCreatedOnColumnName
-      } as const
+      } as const;
       "
-    `)
-  })
-})
+    `);
+  });
+});
 
-describe('inferSchema', () => {
-  it('infers all tables at once', async () => {
-    const code = await inferSchema(connectionString, true, true)
+describe("inferSchema", () => {
+  it("infers all tables at once", async () => {
+    const code = await inferSchema(connectionString, true, true);
     expect(code).toMatchInlineSnapshot(`
       "/* tslint:disable */
       /* eslint-disable */
 
-      export const SchemaName = \\"public\\" as const
+      export const SchemaName = \\"public\\" as const;
 
-      export type JSONPrimitive = string | number | boolean | null
-      export type JSONValue = JSONPrimitive | JSONObject | JSONArray
-      export type JSONObject = { [member: string]: JSONValue }
-      export type JSONArray = Array<JSONValue>
+      export type JSONPrimitive = string | number | boolean | null;
+      export type JSONValue = JSONPrimitive | JSONObject | JSONArray;
+      export type JSONObject = { [member: string]: JSONValue };
+      export type JSONArray = Array<JSONValue>;
 
-      export type AccountTableUsername = string
-      export type AccountTablePassword = string
-      export type AccountTableEmail = string
-      export type AccountTable2a = number
-      export type AccountTableCreatedOn = Date
-      export type AccountTableLastLogin = Date | null
+      export type AccountTableUsername = string;
+      export type AccountTablePassword = string;
+      export type AccountTableEmail = string;
+      export type AccountTable2a = number;
+      export type AccountTableCreatedOn = Date;
+      export type AccountTableLastLogin = Date | null;
 
       export type AccountTable = {
-        username: AccountTableUsername
-        password: AccountTablePassword
-        email: AccountTableEmail
-        \\"2a\\": AccountTable2a
-        createdOn: AccountTableCreatedOn
-        lastLogin: AccountTableLastLogin
-      }
+        username: AccountTableUsername;
+        password: AccountTablePassword;
+        email: AccountTableEmail;
+        \\"2a\\": AccountTable2a;
+        createdOn: AccountTableCreatedOn;
+        lastLogin: AccountTableLastLogin;
+      };
 
-      export const AccountTableName = \\"account\\" as const
+      export const AccountTableName = \\"account\\" as const;
 
-      export const AccountTableUsernameColumnName = \`\\"username\\"\` as const
-      export const AccountTablePasswordColumnName = \`\\"password\\"\` as const
-      export const AccountTableEmailColumnName = \`\\"email\\"\` as const
-      export const AccountTable2aColumnName = \`\\"2a\\"\` as const
-      export const AccountTableCreatedOnColumnName = \`\\"created_on\\"\` as const
-      export const AccountTableLastLoginColumnName = \`\\"last_login\\"\` as const
+      export const AccountTableUsernameColumnName = \`\\"username\\"\` as const;
+      export const AccountTablePasswordColumnName = \`\\"password\\"\` as const;
+      export const AccountTableEmailColumnName = \`\\"email\\"\` as const;
+      export const AccountTable2aColumnName = \`\\"2a\\"\` as const;
+      export const AccountTableCreatedOnColumnName = \`\\"created_on\\"\` as const;
+      export const AccountTableLastLoginColumnName = \`\\"last_login\\"\` as const;
 
       export const AccountTableColumnNames = {
         username: AccountTableUsernameColumnName,
@@ -221,29 +229,29 @@ describe('inferSchema', () => {
         \\"2a\\": AccountTable2aColumnName,
         createdOn: AccountTableCreatedOnColumnName,
         lastLogin: AccountTableLastLoginColumnName
-      } as const
+      } as const;
 
-      export type ComplexTableId = JSONValue
-      export type ComplexTableName = string
-      export type ComplexTableNullable = string | null
-      export type ComplexTableCreatedAt = Date | null
-      export type ComplexTableCreatedOn = Date
+      export type ComplexTableId = JSONValue;
+      export type ComplexTableName = string;
+      export type ComplexTableNullable = string | null;
+      export type ComplexTableCreatedAt = Date | null;
+      export type ComplexTableCreatedOn = Date;
 
       export type ComplexTable = {
-        id: ComplexTableId
-        name: ComplexTableName
-        nullable: ComplexTableNullable
-        createdAt: ComplexTableCreatedAt
-        createdOn: ComplexTableCreatedOn
-      }
+        id: ComplexTableId;
+        name: ComplexTableName;
+        nullable: ComplexTableNullable;
+        createdAt: ComplexTableCreatedAt;
+        createdOn: ComplexTableCreatedOn;
+      };
 
-      export const ComplexTableName = \\"complex\\" as const
+      export const ComplexTableName = \\"complex\\" as const;
 
-      export const ComplexTableIdColumnName = \`\\"id\\"\` as const
-      export const ComplexTableNameColumnName = \`\\"name\\"\` as const
-      export const ComplexTableNullableColumnName = \`\\"nullable\\"\` as const
-      export const ComplexTableCreatedAtColumnName = \`\\"created_at\\"\` as const
-      export const ComplexTableCreatedOnColumnName = \`\\"created_on\\"\` as const
+      export const ComplexTableIdColumnName = \`\\"id\\"\` as const;
+      export const ComplexTableNameColumnName = \`\\"name\\"\` as const;
+      export const ComplexTableNullableColumnName = \`\\"nullable\\"\` as const;
+      export const ComplexTableCreatedAtColumnName = \`\\"created_at\\"\` as const;
+      export const ComplexTableCreatedOnColumnName = \`\\"created_on\\"\` as const;
 
       export const ComplexTableColumnNames = {
         id: ComplexTableIdColumnName,
@@ -251,30 +259,66 @@ describe('inferSchema', () => {
         nullable: ComplexTableNullableColumnName,
         createdAt: ComplexTableCreatedAtColumnName,
         createdOn: ComplexTableCreatedOnColumnName
-      } as const
+      } as const;
 
-      export type RequestsTableName = string
-      export type RequestsTableUrl = string
-      export type RequestsTableIntegrationType = \\"destination\\" | \\"source\\"
+      export type RequestsTableName = string;
+      export type RequestsTableUrl = string;
+      export type RequestsTableIntegrationType = \\"destination\\" | \\"source\\";
+      export type RequestsTableSomeInt = number | null;
 
       export type RequestsTable = {
-        name: RequestsTableName
-        url: RequestsTableUrl
-        integrationType: RequestsTableIntegrationType
-      }
+        name: RequestsTableName;
+        url: RequestsTableUrl;
+        integrationType: RequestsTableIntegrationType;
+        someInt: RequestsTableSomeInt;
+      };
 
-      export const RequestsTableName = \\"requests\\" as const
+      export const RequestsTableName = \\"requests\\" as const;
 
-      export const RequestsTableNameColumnName = \`\\"name\\"\` as const
-      export const RequestsTableUrlColumnName = \`\\"url\\"\` as const
-      export const RequestsTableIntegrationTypeColumnName = \`\\"integration_type\\"\` as const
+      export const RequestsTableNameColumnName = \`\\"name\\"\` as const;
+      export const RequestsTableUrlColumnName = \`\\"url\\"\` as const;
+      export const RequestsTableIntegrationTypeColumnName = \`\\"integration_type\\"\` as const;
+      export const RequestsTableSomeIntColumnName = \`\\"some_int\\"\` as const;
 
       export const RequestsTableColumnNames = {
         name: RequestsTableNameColumnName,
         url: RequestsTableUrlColumnName,
-        integrationType: RequestsTableIntegrationTypeColumnName
-      } as const
+        integrationType: RequestsTableIntegrationTypeColumnName,
+        someInt: RequestsTableSomeIntColumnName
+      } as const;
       "
-    `)
-  })
-})
+    `);
+  });
+});
+
+describe("exportTable", () => {
+  it("export table data", async () => {
+    const code = await exportTable(connectionString, "requests", "name");
+    expect(code).toMatchInlineSnapshot(`
+      "/* tslint:disable */
+      /* eslint-disable */
+
+      export const SchemaName = \\"public\\" as const;
+
+      export type RequestsTableData = typeof RequestsTableData;
+      export const RequestsTableData = {
+        first: {
+          name: \\"first\\",
+          url: \\"is-url\\",
+          integrationType: \\"source\\",
+          someInt: 10
+        },
+        second: {
+          name: \\"second\\",
+          url: \\"the-url\\",
+          integrationType: \\"destination\\",
+          someInt: 20
+        }
+      } as const;
+
+      export type RequestsTableDataPrimaryKeys = typeof RequestsTableDataPrimaryKeys[number];
+      export const RequestsTableDataPrimaryKeys = [\\"first\\", \\"second\\"] as const;
+      "
+    `);
+  });
+});
