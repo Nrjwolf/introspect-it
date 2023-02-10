@@ -1,10 +1,10 @@
 #! /usr/bin/env node
-import yargs = require("yargs/yargs");
+import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { exportTable, inferSchema, inferTable } from "../src";
 
-const main = (): void => {
-  yargs(hideBin(process.argv))
+const main = async (): Promise<void> => {
+  await yargs(hideBin(process.argv))
     .options({
       connection: { type: "string", default: process.env.DATABASE_URL },
       toCamelCase: { type: "boolean", default: process.env.CAMEL_CASE === "true" || false },
@@ -86,4 +86,7 @@ const main = (): void => {
     .parse();
 };
 
-main();
+main().catch(err => {
+  console.error(err);
+  process.exit(1);
+});

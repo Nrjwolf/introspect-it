@@ -7,7 +7,7 @@
     "resolveJsonModule": true,
     "strict": true,
     "sourceMap": true,
-    "incremental": true,
+    "incremental": false,
     "outDir": "dist",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -20,6 +20,6 @@
       "@/*": ["./*"]
     }
   },
-  "exclude": ["node_modules", "dist"],
-  "include": ["**/*.ts", "package.json"]
+  "exclude": ["node_modules", "__tests__", "node_modules/@types/yargs/index.d.ts"],
+  "include": ["src/*", "bin/*", "package.json"]
 }
