@@ -298,8 +298,6 @@ describe("exportTable", () => {
       "/* tslint:disable */
       /* eslint-disable */
 
-      export const SchemaName = \\"public\\" as const;
-
       export type RequestsTableData = typeof RequestsTableData;
       export const RequestsTableData = {
         first: {
