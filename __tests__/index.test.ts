@@ -62,20 +62,20 @@ describe("inferTable", () => {
 
       export const SchemaName = \\"public\\" as const;
 
-      export type AccountTableUsername = string;
-      export type AccountTablePassword = string;
-      export type AccountTableEmail = string;
-      export type AccountTable2a = number;
-      export type AccountTableCreatedOn = Date;
-      export type AccountTableLastLogin = Date | null;
+      export type AccountTableUsernameColumn = string;
+      export type AccountTablePasswordColumn = string;
+      export type AccountTableEmailColumn = string;
+      export type AccountTable2aColumn = number;
+      export type AccountTableCreatedOnColumn = Date;
+      export type AccountTableLastLoginColumn = Date | null;
 
       export type AccountTable = {
-        username: AccountTableUsername;
-        password: AccountTablePassword;
-        email: AccountTableEmail;
-        \\"2a\\": AccountTable2a;
-        createdOn: AccountTableCreatedOn;
-        lastLogin: AccountTableLastLogin;
+        username: AccountTableUsernameColumn;
+        password: AccountTablePasswordColumn;
+        email: AccountTableEmailColumn;
+        \\"2a\\": AccountTable2aColumn;
+        createdOn: AccountTableCreatedOnColumn;
+        lastLogin: AccountTableLastLoginColumn;
       };
 
       export const AccountTableName = \\"account\\" as const;
@@ -107,16 +107,16 @@ describe("inferTable", () => {
 
       export const SchemaName = \\"public\\" as const;
 
-      export type RequestsTableName = string;
-      export type RequestsTableUrl = string;
-      export type RequestsTableIntegrationType = \\"destination\\" | \\"source\\";
-      export type RequestsTableSomeInt = number | null;
+      export type RequestsTableNameColumn = string;
+      export type RequestsTableUrlColumn = string;
+      export type RequestsTableIntegrationTypeColumn = \\"destination\\" | \\"source\\";
+      export type RequestsTableSomeIntColumn = number | null;
 
       export type RequestsTable = {
-        name: RequestsTableName;
-        url: RequestsTableUrl;
-        integrationType: RequestsTableIntegrationType;
-        someInt: RequestsTableSomeInt;
+        name: RequestsTableNameColumn;
+        url: RequestsTableUrlColumn;
+        integrationType: RequestsTableIntegrationTypeColumn;
+        someInt: RequestsTableSomeIntColumn;
       };
 
       export const RequestsTableName = \\"requests\\" as const;
@@ -149,18 +149,18 @@ describe("inferTable", () => {
 
       export const SchemaName = \\"public\\" as const;
 
-      export type ComplexTableId = JSONValue;
-      export type ComplexTableName = string;
-      export type ComplexTableNullable = string | null;
-      export type ComplexTableCreatedAt = Date | null;
-      export type ComplexTableCreatedOn = Date;
+      export type ComplexTableIdColumn = JSONValue;
+      export type ComplexTableNameColumn = string;
+      export type ComplexTableNullableColumn = string | null;
+      export type ComplexTableCreatedAtColumn = Date | null;
+      export type ComplexTableCreatedOnColumn = Date;
 
       export type ComplexTable = {
-        id: ComplexTableId;
-        name: ComplexTableName;
-        nullable: ComplexTableNullable;
-        createdAt: ComplexTableCreatedAt;
-        createdOn: ComplexTableCreatedOn;
+        id: ComplexTableIdColumn;
+        name: ComplexTableNameColumn;
+        nullable: ComplexTableNullableColumn;
+        createdAt: ComplexTableCreatedAtColumn;
+        createdOn: ComplexTableCreatedOnColumn;
       };
 
       export const ComplexTableName = \\"complex\\" as const;
@@ -197,20 +197,20 @@ describe("inferSchema", () => {
       export type JSONObject = { [member: string]: JSONValue };
       export type JSONArray = Array<JSONValue>;
 
-      export type AccountTableUsername = string;
-      export type AccountTablePassword = string;
-      export type AccountTableEmail = string;
-      export type AccountTable2a = number;
-      export type AccountTableCreatedOn = Date;
-      export type AccountTableLastLogin = Date | null;
+      export type AccountTableUsernameColumn = string;
+      export type AccountTablePasswordColumn = string;
+      export type AccountTableEmailColumn = string;
+      export type AccountTable2aColumn = number;
+      export type AccountTableCreatedOnColumn = Date;
+      export type AccountTableLastLoginColumn = Date | null;
 
       export type AccountTable = {
-        username: AccountTableUsername;
-        password: AccountTablePassword;
-        email: AccountTableEmail;
-        \\"2a\\": AccountTable2a;
-        createdOn: AccountTableCreatedOn;
-        lastLogin: AccountTableLastLogin;
+        username: AccountTableUsernameColumn;
+        password: AccountTablePasswordColumn;
+        email: AccountTableEmailColumn;
+        \\"2a\\": AccountTable2aColumn;
+        createdOn: AccountTableCreatedOnColumn;
+        lastLogin: AccountTableLastLoginColumn;
       };
 
       export const AccountTableName = \\"account\\" as const;
@@ -231,18 +231,18 @@ describe("inferSchema", () => {
         lastLogin: AccountTableLastLoginColumnName
       } as const;
 
-      export type ComplexTableId = JSONValue;
-      export type ComplexTableName = string;
-      export type ComplexTableNullable = string | null;
-      export type ComplexTableCreatedAt = Date | null;
-      export type ComplexTableCreatedOn = Date;
+      export type ComplexTableIdColumn = JSONValue;
+      export type ComplexTableNameColumn = string;
+      export type ComplexTableNullableColumn = string | null;
+      export type ComplexTableCreatedAtColumn = Date | null;
+      export type ComplexTableCreatedOnColumn = Date;
 
       export type ComplexTable = {
-        id: ComplexTableId;
-        name: ComplexTableName;
-        nullable: ComplexTableNullable;
-        createdAt: ComplexTableCreatedAt;
-        createdOn: ComplexTableCreatedOn;
+        id: ComplexTableIdColumn;
+        name: ComplexTableNameColumn;
+        nullable: ComplexTableNullableColumn;
+        createdAt: ComplexTableCreatedAtColumn;
+        createdOn: ComplexTableCreatedOnColumn;
       };
 
       export const ComplexTableName = \\"complex\\" as const;
@@ -261,16 +261,16 @@ describe("inferSchema", () => {
         createdOn: ComplexTableCreatedOnColumnName
       } as const;
 
-      export type RequestsTableName = string;
-      export type RequestsTableUrl = string;
-      export type RequestsTableIntegrationType = \\"destination\\" | \\"source\\";
-      export type RequestsTableSomeInt = number | null;
+      export type RequestsTableNameColumn = string;
+      export type RequestsTableUrlColumn = string;
+      export type RequestsTableIntegrationTypeColumn = \\"destination\\" | \\"source\\";
+      export type RequestsTableSomeIntColumn = number | null;
 
       export type RequestsTable = {
-        name: RequestsTableName;
-        url: RequestsTableUrl;
-        integrationType: RequestsTableIntegrationType;
-        someInt: RequestsTableSomeInt;
+        name: RequestsTableNameColumn;
+        url: RequestsTableUrlColumn;
+        integrationType: RequestsTableIntegrationTypeColumn;
+        someInt: RequestsTableSomeIntColumn;
       };
 
       export const RequestsTableName = \\"requests\\" as const;

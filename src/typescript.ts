@@ -20,7 +20,7 @@ export interface Table {
 // }
 
 const typeColumnName = (tableName: string, columnName: string): string => {
-  return `${tableName}${camelCase(columnName, { pascalCase: true, preserveConsecutiveUppercase: true })}`;
+  return `${tableName}${camelCase(columnName, { pascalCase: true, preserveConsecutiveUppercase: true })}Column`;
 };
 
 export function tableToTS(name: string, table: Table, toCamelCase: boolean, useQuotes: boolean): string {
@@ -38,7 +38,7 @@ export function tableToTS(name: string, table: Table, toCamelCase: boolean, useQ
     return `export const ${typeColumnName(
       tableName,
       column
-    )}ColumnName = ${prefixQuoteSymbol}${column}${postfixQuoteSymbol} as const;\n`;
+    )}Name = ${prefixQuoteSymbol}${column}${postfixQuoteSymbol} as const;\n`;
   });
 
   const members = Object.keys(table).map(column => {
@@ -52,7 +52,7 @@ export function tableToTS(name: string, table: Table, toCamelCase: boolean, useQ
     return `"${toCamelCase ? camelCase(column, { preserveConsecutiveUppercase: true }) : column}": ${typeColumnName(
       tableName,
       column
-    )}ColumnName,\n`;
+    )}Name,\n`;
   });
 
   return `
