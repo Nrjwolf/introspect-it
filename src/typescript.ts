@@ -76,17 +76,24 @@ export function tableToTS(
   `;
 }
 
-export const exportTableDataToTs = (name: string, rows: Record<any, any>[], primaryKey: string): string => {
+export const exportTableDataToTs = (
+  name: string,
+  rows: Record<any, any>[],
+  ignoreColumns: string[],
+  primaryKey: string
+): string => {
   const tableName = camelCase(name, { pascalCase: true }) + "Table";
 
   const values = rows.map(item => {
-    const objKeysAndValues = Object.entries(item).reduce((acc, cur) => {
-      const [key, val] = cur;
+    const objKeysAndValues = Object.entries(item)
+      .filter(([key]) => !ignoreColumns.includes(`${key}`))
+      .reduce((acc, cur) => {
+        const [key, val] = cur;
 
-      acc += `"${camelCase(key, { preserveConsecutiveUppercase: true })}": ${JSON.stringify(val)},\n`;
+        acc += `"${camelCase(key, { preserveConsecutiveUppercase: true })}": ${JSON.stringify(val)},\n`;
 
-      return acc;
-    }, "");
+        return acc;
+      }, "");
 
     return `"${item[primaryKey]}": {\n ${objKeysAndValues} },`;
   });

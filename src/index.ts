@@ -63,10 +63,15 @@ export async function inferSchema(
   ${code}`);
 }
 
-export async function exportTable(connectionString: string, table: string, primaryKey = "id"): Promise<string> {
+export async function exportTable(
+  connectionString: string,
+  table: string,
+  ignoreColumns: string[] = [],
+  primaryKey = "id"
+): Promise<string> {
   const db = new Postgres(connectionString);
 
-  const code = exportTableDataToTs(table, await db.query(sql`SELECT * FROM `.append(table)), primaryKey);
+  const code = exportTableDataToTs(table, await db.query(sql`SELECT * FROM `.append(table)), ignoreColumns, primaryKey);
   const fullCode = `
     ${header(code.includes("JSONValue"))}
     ${linterDisableHeader}

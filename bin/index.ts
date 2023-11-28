@@ -19,6 +19,9 @@ const main = async (): Promise<void> => {
             describe: "table to export",
             type: "string"
           })
+          .options({
+            ignoreColumns: { type: "array", default: [] }
+          })
           .positional("primaryKey", {
             describe: "primary key of table",
             default: "id",
@@ -26,13 +29,18 @@ const main = async (): Promise<void> => {
           });
       },
       argv => {
-        const { table, connection, primaryKey } = argv;
+        const { table, connection, primaryKey, ignoreColumns } = argv;
 
         if (!connection || !table) {
           throw new Error(`Table and db are required`);
         }
 
-        exportTable(connection, table, primaryKey)
+        exportTable(
+          connection,
+          table,
+          ignoreColumns.map(v => `${v}`),
+          primaryKey
+        )
           .then(code => {
             console.log(code);
             process.exit();

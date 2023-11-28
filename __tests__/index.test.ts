@@ -431,7 +431,7 @@ describe("inferSchema", () => {
 
 describe("exportTable", () => {
   it("export table data", async () => {
-    const code = await exportTable(connectionString, "requests", "name");
+    const code = await exportTable(connectionString, "requests", [], "name");
     expect(code).toMatchInlineSnapshot(`
       "/* tslint:disable */
       /* eslint-disable */
@@ -447,6 +447,31 @@ describe("exportTable", () => {
         second: {
           name: \\"second\\",
           url: \\"the-url\\",
+          integrationType: \\"destination\\",
+          someInt: 20
+        }
+      } as const;
+
+      export type RequestsTableDataPrimaryKeys = typeof RequestsTableDataPrimaryKeys[number];
+      export const RequestsTableDataPrimaryKeys = [\\"first\\", \\"second\\"] as const;
+      "
+    `);
+  });
+  it("export table data without ignored columns", async () => {
+    const code = await exportTable(connectionString, "requests", ["url"], "name");
+    expect(code).toMatchInlineSnapshot(`
+      "/* tslint:disable */
+      /* eslint-disable */
+
+      export type RequestsTableData = typeof RequestsTableData;
+      export const RequestsTableData = {
+        first: {
+          name: \\"first\\",
+          integrationType: \\"source\\",
+          someInt: 10
+        },
+        second: {
+          name: \\"second\\",
           integrationType: \\"destination\\",
           someInt: 20
         }
