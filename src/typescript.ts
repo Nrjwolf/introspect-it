@@ -23,32 +23,40 @@ const typeColumnName = (tableName: string, columnName: string): string => {
   return `${tableName}${camelCase(columnName, { pascalCase: true, preserveConsecutiveUppercase: true })}Column`;
 };
 
-export function tableToTS(name: string, table: Table, toCamelCase: boolean, useQuotes: boolean): string {
+export function tableToTS(
+  name: string,
+  table: Table,
+  ignoreColumns: string[],
+  toCamelCase: boolean,
+  useQuotes: boolean
+): string {
   const tableName = camelCase(name, { pascalCase: true }) + "Table";
   const prefixQuoteSymbol = useQuotes ? '`"' : '"';
   const postfixQuoteSymbol = useQuotes ? '"`' : '"';
 
-  const fields = Object.keys(table).map(column => {
+  const columns = Object.keys(table).filter(column => !ignoreColumns.includes(`${name}.${column}`));
+
+  const fields = columns.map(column => {
     const type = table[column].tsType;
     const nullable = table[column].nullable ? " | null" : "";
     return `export type ${typeColumnName(tableName, column)} = ${type}${nullable};\n`;
   });
 
-  const columnNames = Object.keys(table).map(column => {
+  const columnNames = columns.map(column => {
     return `export const ${typeColumnName(
       tableName,
       column
     )}Name = ${prefixQuoteSymbol}${column}${postfixQuoteSymbol} as const;\n`;
   });
 
-  const members = Object.keys(table).map(column => {
+  const members = columns.map(column => {
     return `"${toCamelCase ? camelCase(column, { preserveConsecutiveUppercase: true }) : column}": ${typeColumnName(
       tableName,
       column
     )}\n`;
   });
 
-  const columnNamesObj = Object.keys(table).map(column => {
+  const columnNamesObj = columns.map(column => {
     return `"${toCamelCase ? camelCase(column, { preserveConsecutiveUppercase: true }) : column}": ${typeColumnName(
       tableName,
       column

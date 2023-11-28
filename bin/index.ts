@@ -47,10 +47,15 @@ const main = async (): Promise<void> => {
       "infer [table]",
       "infer table",
       yargs => {
-        return yargs.positional("table", {
-          describe: "table to export",
-          type: "string"
-        });
+        return yargs
+          .positional("table", {
+            describe: "table to export",
+            type: "string"
+          })
+          .options({
+            ignoreTables: { type: "array", default: [] },
+            ignoreColumns: { type: "array", default: [] }
+          });
       },
       argv => {
         const { table, connection, toCamelCase, useQuotes } = argv;
@@ -60,7 +65,13 @@ const main = async (): Promise<void> => {
         }
 
         if (table) {
-          inferTable(connection, table, toCamelCase, useQuotes)
+          inferTable(
+            connection,
+            table,
+            argv.ignoreColumns.map(v => `${v}`),
+            toCamelCase,
+            useQuotes
+          )
             .then(code => {
               console.log(code);
               process.exit();
@@ -72,7 +83,13 @@ const main = async (): Promise<void> => {
           return;
         }
 
-        inferSchema(connection, toCamelCase, useQuotes)
+        inferSchema(
+          connection,
+          argv.ignoreTables.map(v => `${v}`),
+          argv.ignoreColumns.map(v => `${v}`),
+          toCamelCase,
+          useQuotes
+        )
           .then(code => {
             console.log(code);
             process.exit();
