@@ -34,7 +34,9 @@ export function tableToTS(
   const prefixQuoteSymbol = useQuotes ? '`"' : '"';
   const postfixQuoteSymbol = useQuotes ? '"`' : '"';
 
-  const columns = Object.keys(table).filter(column => !ignoreColumns.includes(`${name}.${column}`));
+  const columns = Object.keys(table)
+    .filter(column => !ignoreColumns.includes(`${name}.${column}`))
+    .sort((a, b) => a.localeCompare(b));
 
   const fields = columns.map(column => {
     const type = table[column].tsType;
