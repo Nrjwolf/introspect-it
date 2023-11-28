@@ -55,7 +55,7 @@ beforeAll(async () => {
 
 describe("inferTable", () => {
   it("infers a table", async () => {
-    const code = await inferTable(connectionString, "account", true, true);
+    const code = await inferTable(connectionString, "account", [], true, true);
     expect(code).toMatchInlineSnapshot(`
       "/* tslint:disable */
       /* eslint-disable */
@@ -100,7 +100,7 @@ describe("inferTable", () => {
   });
 
   it("works with enums", async () => {
-    const code = await inferTable(connectionString, "requests", true);
+    const code = await inferTable(connectionString, "requests", [], true);
     expect(code).toMatchInlineSnapshot(`
       "/* tslint:disable */
       /* eslint-disable */
@@ -137,7 +137,7 @@ describe("inferTable", () => {
   });
 
   it("works with complex types", async () => {
-    const code = await inferTable(connectionString, "complex", true);
+    const code = await inferTable(connectionString, "complex", [], true);
     expect(code).toMatchInlineSnapshot(`
       "export type JSONPrimitive = string | number | boolean | null;
       export type JSONValue = JSONPrimitive | JSONObject | JSONArray;
@@ -185,7 +185,7 @@ describe("inferTable", () => {
 
 describe("inferSchema", () => {
   it("infers all tables at once", async () => {
-    const code = await inferSchema(connectionString, true, true);
+    const code = await inferSchema(connectionString, [], [], true, true);
     expect(code).toMatchInlineSnapshot(`
       "/* tslint:disable */
       /* eslint-disable */
@@ -256,6 +256,144 @@ describe("inferSchema", () => {
       export const ComplexTableColumnNames = {
         id: ComplexTableIdColumnName,
         name: ComplexTableNameColumnName,
+        nullable: ComplexTableNullableColumnName,
+        createdAt: ComplexTableCreatedAtColumnName,
+        createdOn: ComplexTableCreatedOnColumnName
+      } as const;
+
+      export type RequestsTableNameColumn = string;
+      export type RequestsTableUrlColumn = string;
+      export type RequestsTableIntegrationTypeColumn = \\"destination\\" | \\"source\\";
+      export type RequestsTableSomeIntColumn = number | null;
+
+      export type RequestsTable = {
+        name: RequestsTableNameColumn;
+        url: RequestsTableUrlColumn;
+        integrationType: RequestsTableIntegrationTypeColumn;
+        someInt: RequestsTableSomeIntColumn;
+      };
+
+      export const RequestsTableName = \\"requests\\" as const;
+
+      export const RequestsTableNameColumnName = \`\\"name\\"\` as const;
+      export const RequestsTableUrlColumnName = \`\\"url\\"\` as const;
+      export const RequestsTableIntegrationTypeColumnName = \`\\"integration_type\\"\` as const;
+      export const RequestsTableSomeIntColumnName = \`\\"some_int\\"\` as const;
+
+      export const RequestsTableColumnNames = {
+        name: RequestsTableNameColumnName,
+        url: RequestsTableUrlColumnName,
+        integrationType: RequestsTableIntegrationTypeColumnName,
+        someInt: RequestsTableSomeIntColumnName
+      } as const;
+      "
+    `);
+  });
+  it("infers all tables except ignored", async () => {
+    const code = await inferSchema(connectionString, ["account"], [], true, true);
+    expect(code).toMatchInlineSnapshot(`
+      "/* tslint:disable */
+      /* eslint-disable */
+
+      export const SchemaName = \\"public\\" as const;
+
+      export type JSONPrimitive = string | number | boolean | null;
+      export type JSONValue = JSONPrimitive | JSONObject | JSONArray;
+      export type JSONObject = { [member: string]: JSONValue };
+      export type JSONArray = Array<JSONValue>;
+
+      export type ComplexTableIdColumn = JSONValue;
+      export type ComplexTableNameColumn = string;
+      export type ComplexTableNullableColumn = string | null;
+      export type ComplexTableCreatedAtColumn = Date | null;
+      export type ComplexTableCreatedOnColumn = Date;
+
+      export type ComplexTable = {
+        id: ComplexTableIdColumn;
+        name: ComplexTableNameColumn;
+        nullable: ComplexTableNullableColumn;
+        createdAt: ComplexTableCreatedAtColumn;
+        createdOn: ComplexTableCreatedOnColumn;
+      };
+
+      export const ComplexTableName = \\"complex\\" as const;
+
+      export const ComplexTableIdColumnName = \`\\"id\\"\` as const;
+      export const ComplexTableNameColumnName = \`\\"name\\"\` as const;
+      export const ComplexTableNullableColumnName = \`\\"nullable\\"\` as const;
+      export const ComplexTableCreatedAtColumnName = \`\\"created_at\\"\` as const;
+      export const ComplexTableCreatedOnColumnName = \`\\"created_on\\"\` as const;
+
+      export const ComplexTableColumnNames = {
+        id: ComplexTableIdColumnName,
+        name: ComplexTableNameColumnName,
+        nullable: ComplexTableNullableColumnName,
+        createdAt: ComplexTableCreatedAtColumnName,
+        createdOn: ComplexTableCreatedOnColumnName
+      } as const;
+
+      export type RequestsTableNameColumn = string;
+      export type RequestsTableUrlColumn = string;
+      export type RequestsTableIntegrationTypeColumn = \\"destination\\" | \\"source\\";
+      export type RequestsTableSomeIntColumn = number | null;
+
+      export type RequestsTable = {
+        name: RequestsTableNameColumn;
+        url: RequestsTableUrlColumn;
+        integrationType: RequestsTableIntegrationTypeColumn;
+        someInt: RequestsTableSomeIntColumn;
+      };
+
+      export const RequestsTableName = \\"requests\\" as const;
+
+      export const RequestsTableNameColumnName = \`\\"name\\"\` as const;
+      export const RequestsTableUrlColumnName = \`\\"url\\"\` as const;
+      export const RequestsTableIntegrationTypeColumnName = \`\\"integration_type\\"\` as const;
+      export const RequestsTableSomeIntColumnName = \`\\"some_int\\"\` as const;
+
+      export const RequestsTableColumnNames = {
+        name: RequestsTableNameColumnName,
+        url: RequestsTableUrlColumnName,
+        integrationType: RequestsTableIntegrationTypeColumnName,
+        someInt: RequestsTableSomeIntColumnName
+      } as const;
+      "
+    `);
+  });
+  it("infers all tables columns tables except ignored", async () => {
+    const code = await inferSchema(connectionString, ["account"], ["complex.name"], true, true);
+    expect(code).toMatchInlineSnapshot(`
+      "/* tslint:disable */
+      /* eslint-disable */
+
+      export const SchemaName = \\"public\\" as const;
+
+      export type JSONPrimitive = string | number | boolean | null;
+      export type JSONValue = JSONPrimitive | JSONObject | JSONArray;
+      export type JSONObject = { [member: string]: JSONValue };
+      export type JSONArray = Array<JSONValue>;
+
+      export type ComplexTableIdColumn = JSONValue;
+      export type ComplexTableNullableColumn = string | null;
+      export type ComplexTableCreatedAtColumn = Date | null;
+      export type ComplexTableCreatedOnColumn = Date;
+
+      export type ComplexTable = {
+        id: ComplexTableIdColumn;
+        nullable: ComplexTableNullableColumn;
+        createdAt: ComplexTableCreatedAtColumn;
+        createdOn: ComplexTableCreatedOnColumn;
+      };
+
+      export const ComplexTableName = \\"complex\\" as const;
+
+      export const ComplexTableIdColumnName = \`\\"id\\"\` as const;
+      export const ComplexTableNullableColumnName = \`\\"nullable\\"\` as const;
+      export const ComplexTableCreatedAtColumnName = \`\\"created_at\\"\` as const;
+      export const ComplexTableCreatedOnColumnName = \`\\"created_on\\"\` as const;
+
+      export const ComplexTableColumnNames = {
+        id: ComplexTableIdColumnName,
         nullable: ComplexTableNullableColumnName,
         createdAt: ComplexTableCreatedAtColumnName,
         createdOn: ComplexTableCreatedOnColumnName
