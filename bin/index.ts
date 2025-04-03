@@ -8,7 +8,8 @@ const main = async (): Promise<void> => {
     .options({
       connection: { type: "string", default: process.env.DATABASE_URL },
       toCamelCase: { type: "boolean", default: process.env.CAMEL_CASE === "true" || false },
-      useQuotes: { type: "boolean", default: process.env.USE_QUOTES === "true" || false }
+      useQuotes: { type: "boolean", default: process.env.USE_QUOTES === "true" || false },
+      nullableJson: { type: "boolean", default: process.env.NULLABLE_JSON === "true" || false }
     })
     .command(
       "export [table] [primaryKey]",
@@ -29,7 +30,7 @@ const main = async (): Promise<void> => {
           });
       },
       argv => {
-        const { table, connection, primaryKey, ignoreColumns } = argv;
+        const { table, connection, primaryKey, ignoreColumns, nullableJson } = argv;
 
         if (!connection || !table) {
           throw new Error(`Table and db are required`);
@@ -39,7 +40,8 @@ const main = async (): Promise<void> => {
           connection,
           table,
           ignoreColumns.map(v => `${v}`),
-          primaryKey
+          primaryKey,
+          nullableJson
         )
           .then(code => {
             console.log(code);
@@ -66,7 +68,7 @@ const main = async (): Promise<void> => {
           });
       },
       argv => {
-        const { table, connection, toCamelCase, useQuotes } = argv;
+        const { table, connection, toCamelCase, useQuotes, nullableJson } = argv;
 
         if (!connection) {
           throw new Error(`Table and pgConnection are required`);
@@ -78,7 +80,8 @@ const main = async (): Promise<void> => {
             table,
             argv.ignoreColumns.map(v => `${v}`),
             toCamelCase,
-            useQuotes
+            useQuotes,
+            nullableJson
           )
             .then(code => {
               console.log(code);
@@ -96,7 +99,8 @@ const main = async (): Promise<void> => {
           argv.ignoreTables.map(v => `${v}`),
           argv.ignoreColumns.map(v => `${v}`),
           toCamelCase,
-          useQuotes
+          useQuotes,
+          nullableJson
         )
           .then(code => {
             console.log(code);
